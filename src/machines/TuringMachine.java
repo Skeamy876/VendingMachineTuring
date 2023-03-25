@@ -12,7 +12,7 @@ public class TuringMachine {
         this.inputString = inputString;
         ComputationRegister computationRegister = new ComputationRegister(inputString);
         computationRegister.sumMoney();
-        computationRegister.verify();
+        computationRegister.verify(input);
 
     }
 
