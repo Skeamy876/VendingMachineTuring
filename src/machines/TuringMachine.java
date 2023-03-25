@@ -11,6 +11,7 @@ public class TuringMachine {
     public TuringMachine(LinkedList<String> inputString) {
         this.inputString = inputString;
         ComputationRegister computationRegister = new ComputationRegister(inputString);
+        computationRegister.sumMoney();
         computationRegister.verify();
 
     }
