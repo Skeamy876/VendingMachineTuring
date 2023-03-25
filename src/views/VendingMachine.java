@@ -187,21 +187,27 @@ public class VendingMachine extends JFrame implements ActionListener {
             dispenseDisplay.setText("");
         }
 
-       if (e.getSource() == this.submitBtn) {
-            String input = this.keyPadDisplay.getText();
-            if (input.isEmpty()) {
-                System.out.println("You must enter coins and an item. Please restart.\n");
-                input = this.keyPadDisplay.getText();
-            } else {
-                LinkedList<String> inputString = new LinkedList();
+        if (e.getSource() == submitBtn) {
+            String input = keyPadDisplay.getText();
 
-                for(int i = 0; i < input.length(); ++i) {
+            //trying to block empty string
+            if (input.isEmpty())
+            {
+                System.out.println("You must enter coins and an item. Please restart.\n");
+                input=keyPadDisplay.getText();
+            }
+            //end here
+            else {
+                LinkedList<String> inputString = new LinkedList<String>();
+                for (int i = 0; i < input.length(); i++) {
                     inputString.add(input.substring(i, i + 1));
                 }
 
-                TuringMachine turingMachine = new TuringMachine(inputString);
+                TuringMachine turingMachine = new TuringMachine(inputString,input);
                 String result = turingMachine.runResult();
-                this.dispenseDisplay.setText(result);
+
+
+                dispenseDisplay.setText(result);
             }
         }
 
