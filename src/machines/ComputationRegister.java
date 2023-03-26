@@ -2,6 +2,7 @@ package machines;
 
 import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 
 public class ComputationRegister {
     private final LinkedList<String> money = new LinkedList<>(Arrays.asList("α", "β", "γ"));
@@ -14,12 +15,17 @@ public class ComputationRegister {
     public LinkedList<String> requestedItems =new LinkedList<>();//list to identify and separate requested items in each order
     public int flag = 0;//used for verifying input
 
+    private Result result = new Result();
+
+
     public ComputationRegister(LinkedList<String> tape) {
+
         this.tape = tape;
+        this.sumMoney();
     }
 
     //function to calculate sum of money in each request
-    public void sumMoney()
+    private void sumMoney()
     {
         LinkedList<String> copy = new LinkedList<>(tape);
         for(String s : copy)
@@ -44,8 +50,10 @@ public class ComputationRegister {
         System.out.println("Money Available: " + moneyEntered);
     }
     //function to verify overall string input
-    public void verify(String input){
-        System.out.println("input:"+input);
+    public Result verify(){
+        for (String tapeElement :  this.tape){
+            System.out.println("String:"+ tapeElement);
+        }
         LinkedList<String> tapeCopy = new LinkedList<>(tape);
         for(String s : tapeCopy) {
             if(money.contains(s)) {
@@ -105,7 +113,7 @@ public class ComputationRegister {
              if (flag == 1)
              {
                 System.out.println("Valid input. Processing request.\n");
-                calcCost();
+               result= this.calcCost();
 
               }
         }
@@ -114,19 +122,25 @@ public class ComputationRegister {
         */
         else if (tape.get(0).equals("N"))
         {
+            boolean flag= false;
                 //call function to verify owner
                 System.out.println("Verifying owner****\n");
-                verifyOwner(input);
+                flag = verifyOwner(tape);
+
+                if (flag == true){
+                    result.setOwner(true);
+                }
         }
         else
         {
             System.out.println("Invalid input. Please enter COINS first.\n");
         }
+        return result;
     }
 
     /*function to calculate change after deducting items as they are entered
     or possibly issue refund*/
-    public void calcCost()
+    private Result calcCost()
     {
         change = moneyEntered;
         System.out.println("List of requested items:\n");
@@ -142,10 +156,13 @@ public class ComputationRegister {
                             {
                                 change -= 10;
                                 System.out.println("NAPKIN dispensed.\n");
+                                result.addActions("NAPKIN dispensed");
                             }
                             else
                             {
                                 System.out.println("Not enough money to get NAPKIN.\n");
+                                result.addActions("Not enough money to get NAPKIN");
+
                             }
 
                             break;
@@ -154,10 +171,12 @@ public class ComputationRegister {
                             {
                                 change -= 15;
                                 System.out.println("FORK dispensed.\n");
+                                result.addActions("FORK dispensed");
                             }
                             else
                             {
                                 System.out.println("Not enough money to get FORK.\n");
+                                result.addActions("Not enough money to get FORK");
                             }
                             break;
                         case "S":
@@ -165,10 +184,13 @@ public class ComputationRegister {
                             {
                                 change -= 20;
                                 System.out.println("SPOON dispensed\n");
+                                result.addActions("SPOON dispensed");
                             }
                             else
                             {
                                 System.out.println("Not enough money to get SPOON.\n");
+                                result.addActions("Not enough money to get SPOON");
+
                             }
                             break;
                         case "K":
@@ -177,33 +199,41 @@ public class ComputationRegister {
                             {
                                 change -= 25;
                                 System.out.println("KNIFE dispensed.\n");
+                                result.addActions("KNIFE dispensed");
                             }
                             else
                             {
                                 System.out.println("Not enough money to get FORK.\n");
+                                result.addActions("Not enough money to get FORK");
                             }
                             break;
                         default:
                             System.out.println("Not enough money entered to purchase items.\n");
+                            result.addActions("Not enough money entered to purchase items");
                     }
                 }
-            till-=change;
             System.out.println("Till: "+till);
             System.out.println("Change: " + change);
         }
+        till-=change;
+        result.setChange(change);
+        result.setTill(till);
+
+        return result;
     }
 
-    public void verifyOwner(String input)
+    public boolean verifyOwner(LinkedList<String> tape)
     {
-        if(input.equals("NKSFFSKS"))
+        LinkedList<String> ownerString = new LinkedList<>(List.of("N","K","S","F","F","S","K","S"));
+        if(tape.equals(ownerString))
         {
-            System.out.println("Welcome Owner!\n");
-            System.out.println("Till at log in : $"+till);
+            return true;
         }
         else
         {
-            System.out.println("Invalid code.Access denied.\n");
+            return false;
         }
+
     }
     public LinkedList<String> getMoney() {
         return money;

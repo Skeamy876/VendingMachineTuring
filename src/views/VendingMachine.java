@@ -1,5 +1,6 @@
 package views;
 
+import machines.Result;
 import machines.TuringMachine;
 
 import javax.imageio.ImageIO;
@@ -22,6 +23,8 @@ public class VendingMachine extends JFrame implements ActionListener {
     private JTextField keyPadDisplay;
     private JTextArea dispenseDisplay;
     private JButton submitBtn,clearBtn;
+    private static long till=0;
+    private Result result;
 
     public VendingMachine() throws HeadlessException {
         this.initializeComponents();
@@ -41,7 +44,7 @@ public class VendingMachine extends JFrame implements ActionListener {
         dispensePanel = new JPanel();
         this.initializeImages();
         dispenseDisplay = new JTextArea("",20,20);
-        dispenseDisplay.setFont(new Font("Arial",Font.BOLD,30));
+        dispenseDisplay.setFont(new Font("Arial",Font.BOLD,8));
         dispenseDisplay.setEditable(false);
         keyPadDisplay = new JTextField("",10);
         keyPadDisplay.setFont(new Font("Arial",Font.BOLD,30));
@@ -78,7 +81,7 @@ public class VendingMachine extends JFrame implements ActionListener {
         itemsPanel.add(new JLabel(new ImageIcon(napkinImgScl)));
         itemsPanel.add(new JLabel("N  : $10- β"));
         itemsPanel.add(new JLabel(new ImageIcon(knifeImgScl)));
-        itemsPanel.add(new JLabel("K  : $25- αγ"));
+        itemsPanel.add(new JLabel("K  : $25- βγ"));
         itemsPanel.add(new JLabel(new ImageIcon(forkImgScl)));
         itemsPanel.add(new JLabel("F : $15- βα"));
         itemsPanel.add(new JLabel(new ImageIcon(spoonImgScl)));
@@ -125,7 +128,7 @@ public class VendingMachine extends JFrame implements ActionListener {
 
 
     private void setFonts() {
-        Font font = new Font("Arial",Font.BOLD,20);
+        Font font = new Font("Arial",Font.BOLD,15);
         fiveDollarBtn.setFont(font);
         tenDollarBtn.setFont(font);
         twentyDollarBtn.setFont(font);
@@ -203,11 +206,17 @@ public class VendingMachine extends JFrame implements ActionListener {
                     inputString.add(input.substring(i, i + 1));
                 }
 
-                TuringMachine turingMachine = new TuringMachine(inputString,input);
-                String result = turingMachine.runResult();
+                TuringMachine turingMachine = new TuringMachine(inputString);
+                this.result = turingMachine.runResult();
+                long tillResult = result.getTill();
+                boolean isOwner = result.isOwner();
+                till = till + tillResult;
 
-
-                dispenseDisplay.setText(result);
+                if (isOwner==true){
+                    JOptionPane.showMessageDialog(this, "Welcome Owner, Till is "+ till,"Owner Information",JOptionPane.INFORMATION_MESSAGE); //dialog box to show items along with till
+                }else {
+                    dispenseDisplay.setText(result.toString());
+                }
             }
         }
 
