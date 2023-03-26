@@ -50,7 +50,7 @@ public class Result {
     }
     @Override
     public String toString() {
-        for (String element : actions){
+        for (String element : actions){ // use string builder
             return element;
 
         }

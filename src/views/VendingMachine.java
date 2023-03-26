@@ -24,6 +24,7 @@ public class VendingMachine extends JFrame implements ActionListener {
     private JTextArea dispenseDisplay;
     private JButton submitBtn,clearBtn;
     private static long till=0;
+    private static int forkCount,napkinCount,knifeCount,spoonCount;
     private Result result;
 
     public VendingMachine() throws HeadlessException {
