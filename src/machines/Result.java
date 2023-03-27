@@ -48,13 +48,20 @@ public class Result {
     public void setOwner(boolean owner) {
         isOwner = owner;
     }
+
+    public List<String> getActions() {
+        return actions;
+    }
+
+    public void setActions(List<String> actions) {
+        this.actions = actions;
+    }
+
     @Override
     public String toString() {
-        for (String element : actions){ // use string builder
-            return element;
-
+        for (String element : actions){
+            return element + "\nChange: "+change;
         }
-        return "Change: " + change;
-
+        return "No actions";
     }
 }

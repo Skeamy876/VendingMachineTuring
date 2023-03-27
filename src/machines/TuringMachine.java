@@ -17,8 +17,6 @@ public class TuringMachine {
         this.result = computationRegister.verify();
     }
 
-
-
     public Result runResult(){
         return result;
     }

@@ -1,5 +1,8 @@
 package machines;
 
+import views.VendingMachine;
+
+import javax.swing.*;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,12 +11,11 @@ public class ComputationRegister {
     private final LinkedList<String> money = new LinkedList<>(Arrays.asList("α", "β", "γ"));
     private  final LinkedList<String> items = new LinkedList<>(Arrays.asList("N", "F", "K", "S"));
     private  LinkedList<String> tape;
-    //new variables related to dispensing items
     public int moneyEntered = 0;//stores money entered per use
     public int till =0;//stores total money entered into vending machine
     public int change = 0;
     public LinkedList<String> requestedItems =new LinkedList<>();//list to identify and separate requested items in each order
-    public int flag = 0;//used for verifying input
+    public int flag = 0;
 
     private Result result = new Result();
 
@@ -24,11 +26,10 @@ public class ComputationRegister {
         this.sumMoney();
     }
 
-    //function to calculate sum of money in each request
     private void sumMoney()
     {
-        LinkedList<String> copy = new LinkedList<>(tape);
-        for(String s : copy)
+        LinkedList<String> TapeCopy = new LinkedList<>(tape);
+        for(String s : TapeCopy)
         {
             if(money.contains(s)) {
                 switch (s) {
@@ -42,17 +43,18 @@ public class ComputationRegister {
                         moneyEntered += 20;
                         break;
                     default:
-                        System.out.println("Value not defined. Start over.\n");//throw new IllegalStateException("Unexpected value: " + s);
+                        Object[] options = { "TRY AGAIN" };
+                        JOptionPane.showOptionDialog(null,"Invalid input please try again",
+                                "Input Error", JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,
+                                null,options,options[0]);
                 }
             }
         }
-        till+=moneyEntered;//updating till
-        System.out.println("Money Available: " + moneyEntered);
+        till+=moneyEntered;
     }
     //function to verify overall string input
     public Result verify(){
         for (String tapeElement :  this.tape){
-            System.out.println("String:"+ tapeElement);
         }
         LinkedList<String> tapeCopy = new LinkedList<>(tape);
         for(String s : tapeCopy) {
@@ -69,15 +71,16 @@ public class ComputationRegister {
         //ensuring both a coin and item is entered in that order,ie coins then items
         if(tapeCopy.get(0)=="1" && tapeCopy.get(tapeCopy.size()-1)!= "0")
         {
-            System.out.println("Invalid output. Please restart and select item last this time.\n");
+            Object[] options = { "TRY AGAIN" };
+            JOptionPane.showOptionDialog(null,"Invalid output. Please restart and select item last this time.\n",
+                    "Input Output", JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE,
+                    null,options,options[0]);
             //if invalid request, reduce till by value entered then reset value entered
             till-=moneyEntered;
             moneyEntered = 0;
-            System.out.println("Money Available: " + moneyEntered);
         }
         else if(tapeCopy.get(0)=="1" && tapeCopy.get(tapeCopy.size()-1)== "0")
         {
-            System.out.println("CHECKING BODY OF STRING\n");
 
             for(int i = 0; i< tapeCopy.size(); i++) {
                 int j = i + 1;
@@ -85,11 +88,9 @@ public class ComputationRegister {
                 {
                     if (tapeCopy.get(i) == "0" && tapeCopy.get(j) == "1")
                     {
-                        System.out.println("Coin entered after items. This is an invalid input.\n");
                         //if invalid request, reduce till by value entered then reset value entered
                         till-=moneyEntered;
                         moneyEntered =0;
-                        System.out.println("Money Available: " + moneyEntered);
                         flag = -1;
                         break;
                     }
@@ -101,18 +102,15 @@ public class ComputationRegister {
                 }
 
                 if (flag == -1) {
-                    System.out.println("Invalid input found. Aborting request.\n");
                     //if invalid request, reduce till by value entered then reset value entered
                     till-=moneyEntered;
                     moneyEntered=0;
-                    System.out.println("Money Available: " + moneyEntered);
                     break;
                 }
 
             }
              if (flag == 1)
              {
-                System.out.println("Valid input. Processing request.\n");
                result= this.calcCost();
 
               }
@@ -124,16 +122,16 @@ public class ComputationRegister {
         {
             boolean flag= false;
                 //call function to verify owner
-                System.out.println("Verifying owner****\n");
-                flag = verifyOwner(tape);
+            result.addActions("Verifying Owner...");
+            flag = verifyOwner(tape);
 
-                if (flag == true){
-                    result.setOwner(true);
-                }
+            if (flag == true){
+                result.setOwner(true);
+            }
         }
         else
         {
-            System.out.println("Invalid input. Please enter COINS first.\n");
+            result.addActions("Invalid input. Please enter COINS first.");
         }
         return result;
     }
@@ -143,10 +141,8 @@ public class ComputationRegister {
     private Result calcCost()
     {
         change = moneyEntered;
-        System.out.println("List of requested items:\n");
         for(String i : requestedItems)
         {
-            System.out.println(i);
             if(items.contains(i) )
             {
                 //checks if enough money is left from what is entered to get current/next item
@@ -155,12 +151,13 @@ public class ComputationRegister {
                             if(change >= 10)
                             {
                                 change -= 10;
-                                System.out.println("NAPKIN dispensed.\n");
                                 result.addActions("NAPKIN dispensed");
+                                CounterRegister napkinCounter = new CounterRegister("Napkin",VendingMachine.napkinCount);
+                                int count = napkinCounter.decrement();
+                                VendingMachine.updateNapkinCount(count);
                             }
                             else
                             {
-                                System.out.println("Not enough money to get NAPKIN.\n");
                                 result.addActions("Not enough money to get NAPKIN");
 
                             }
@@ -170,12 +167,12 @@ public class ComputationRegister {
                             if(change >= 15)
                             {
                                 change -= 15;
-                                System.out.println("FORK dispensed.\n");
                                 result.addActions("FORK dispensed");
-                            }
+                                CounterRegister forkCounter = new CounterRegister("Fork",VendingMachine.forkCount);
+                                int count = forkCounter.decrement();
+                                VendingMachine.updateForkCount(count);                            }
                             else
                             {
-                                System.out.println("Not enough money to get FORK.\n");
                                 result.addActions("Not enough money to get FORK");
                             }
                             break;
@@ -183,14 +180,13 @@ public class ComputationRegister {
                             if(change >= 20)
                             {
                                 change -= 20;
-                                System.out.println("SPOON dispensed\n");
                                 result.addActions("SPOON dispensed");
-                            }
+                                CounterRegister spoonCounter = new CounterRegister("Spoon",VendingMachine.spoonCount);
+                                int count = spoonCounter.decrement();
+                                VendingMachine.updateSpoonCount(count);                            }
                             else
                             {
-                                System.out.println("Not enough money to get SPOON.\n");
                                 result.addActions("Not enough money to get SPOON");
-
                             }
                             break;
                         case "K":
@@ -198,22 +194,20 @@ public class ComputationRegister {
                             if(change >= 25)
                             {
                                 change -= 25;
-                                System.out.println("KNIFE dispensed.\n");
                                 result.addActions("KNIFE dispensed");
+                                CounterRegister knifeCounter = new CounterRegister("Knife",VendingMachine.knifeCount);
+                                int count = knifeCounter.decrement();
+                                VendingMachine.updateKnifeCount(count);
                             }
                             else
                             {
-                                System.out.println("Not enough money to get FORK.\n");
                                 result.addActions("Not enough money to get FORK");
                             }
                             break;
                         default:
-                            System.out.println("Not enough money entered to purchase items.\n");
                             result.addActions("Not enough money entered to purchase items");
                     }
                 }
-            System.out.println("Till: "+till);
-            System.out.println("Change: " + change);
         }
         till-=change;
         result.setChange(change);
