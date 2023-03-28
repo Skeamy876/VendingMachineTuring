@@ -1,0 +1,56 @@
+========SALES INFO======== 
+Till Amount:  25
+Fork stock left:  19
+Knife stock left:  20
+Spoon stock left:  20
+Napkin stock left:  19
+TimeStamp :  28-03-2023 13:52:37
+
+========SALES INFO======== 
+Till Amount:  55
+Fork stock left:  20
+Knife stock left:  19
+Spoon stock left:  19
+Napkin stock left:  19
+TimeStamp :  28-03-2023 13:57:20
+
+========SALES INFO======== 
+Till Amount:  35
+Fork stock left:  20
+Knife stock left:  19
+Spoon stock left:  20
+Napkin stock left:  19
+TimeStamp :  28-03-2023 14:01:23
+
+========SALES INFO======== 
+Till Amount:  35
+Fork stock left:  19
+Knife stock left:  20
+Spoon stock left:  19
+Napkin stock left:  20
+TimeStamp :  28-03-2023 14:03:03
+
+========SALES INFO======== 
+Till Amount:  35
+Fork stock left:  20
+Knife stock left:  19
+Spoon stock left:  20
+Napkin stock left:  19
+TimeStamp :  28-03-2023 14:11:48
+
+========SALES INFO======== 
+Till Amount:  50
+Fork stock left:  19
+Knife stock left:  19
+Spoon stock left:  20
+Napkin stock left:  19
+TimeStamp :  28-03-2023 14:12:32
+
+========SALES INFO======== 
+Till Amount:  70
+Fork stock left:  20
+Knife stock left:  18
+Spoon stock left:  20
+Napkin stock left:  18
+TimeStamp :  28-03-2023 14:15:28
+

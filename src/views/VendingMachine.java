@@ -1,5 +1,6 @@
 package views;
 
+import machines.ComputationRegister;
 import machines.Result;
 import machines.TuringMachine;
 
@@ -10,8 +11,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
+
 
 public class VendingMachine extends JFrame implements ActionListener {
     private JPanel itemsPanel;
@@ -109,7 +114,7 @@ public class VendingMachine extends JFrame implements ActionListener {
         itemsPanel.add(new JLabel("N  : $10- β"+" "+"# :"));
         itemsPanel.add(napkinItemCountLabel);
         itemsPanel.add(new JLabel(new ImageIcon(knifeImgScl)));
-        itemsPanel.add(new JLabel("K  : $25- βγ"+" "+"# :"));
+        itemsPanel.add(new JLabel("K  : $25- αγ"+" "+"# :"));
         itemsPanel.add(knifeItemCountLabel);
         itemsPanel.add(new JLabel(new ImageIcon(forkImgScl)));
         itemsPanel.add(new JLabel("F : $15- βα"+" "+"# :"));
@@ -248,7 +253,55 @@ public class VendingMachine extends JFrame implements ActionListener {
                 till = till + tillResult;
 
                 if (isOwner==true){
-                    JOptionPane.showMessageDialog(this, "Welcome Owner, Till is "+ till,"Owner Information",JOptionPane.INFORMATION_MESSAGE); //dialog box to show items along with till
+                    JOptionPane.showMessageDialog(this, "Welcome Owner, Till is "+ till,"Owner Information",JOptionPane.INFORMATION_MESSAGE);
+                    LocalDateTime myDateObj = LocalDateTime.now();
+                    DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                    String formattedDate = myDateObj.format(myFormatObj);
+
+                    try {
+                        FileWriter fileWriter = new FileWriter("salesinfo.txt", true);
+                        fileWriter.write(String.valueOf("========SALES INFO======== "));
+                        fileWriter.write(System.getProperty( "line.separator" ));
+                        fileWriter.write(String.valueOf("Till Amount: "+" "+till));
+                        fileWriter.write(System.getProperty( "line.separator" ));
+                        fileWriter.write(String.valueOf("Fork stock left: "+" "+forkCount));
+                        fileWriter.write(System.getProperty( "line.separator" ));
+                        fileWriter.write(String.valueOf("Knife stock left: "+" "+knifeCount));
+                        fileWriter.write(System.getProperty( "line.separator" ));
+                        fileWriter.write(String.valueOf("Spoon stock left: "+" "+spoonCount));
+                        fileWriter.write(System.getProperty( "line.separator" ));
+                        fileWriter.write(String.valueOf("Napkin stock left: "+" "+napkinCount));
+                        fileWriter.write(System.getProperty( "line.separator" ));
+                        fileWriter.write(String.valueOf("TimeStamp : "+" "+formattedDate));
+                        fileWriter.write(System.getProperty( "line.separator" ));
+                        fileWriter.write(System.getProperty( "line.separator" ));
+                        fileWriter.close();
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
+                    }
+                    int count=0;
+                    while (count<80){
+                        if (forkCount!=20){
+                            updateForkCount(ComputationRegister.forkCounter.increment());
+                        }
+                        if (knifeCount!=20){
+                            updateKnifeCount(ComputationRegister.knifeCounter.increment());
+
+                        }
+
+                        if (spoonCount!=20){
+                            updateSpoonCount(ComputationRegister.spoonCounter.increment());
+                        }
+
+                        if (napkinCount!=20){
+                            updateNapkinCount(ComputationRegister.napkinCounter.increment());
+                        }
+                        count++;
+                    }
+                    JOptionPane.showMessageDialog(this, "Sales Info has been saved to salesinfo.txt and Stock reset","Sales Info",JOptionPane.INFORMATION_MESSAGE);
+                    this.dispose();
+                    new VendingMachine();
+
                 }else {
                     dispenseDisplay.setText(dispenseDisplay.getText()+"\n Items: ");
                     for(String element: result.getActions()){

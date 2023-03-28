@@ -16,6 +16,10 @@ public class ComputationRegister {
     public int change = 0;
     public LinkedList<String> requestedItems =new LinkedList<>();//list to identify and separate requested items in each order
     public int flag = 0;
+    public static  CounterRegister napkinCounter = new CounterRegister("Napkin",VendingMachine.napkinCount);
+    public static CounterRegister forkCounter = new CounterRegister("Fork",VendingMachine.forkCount);
+    public static CounterRegister knifeCounter = new CounterRegister("Knife",VendingMachine.knifeCount);
+    public static CounterRegister spoonCounter = new CounterRegister("Spoon",VendingMachine.spoonCount);
 
     private Result result = new Result();
 
@@ -24,6 +28,8 @@ public class ComputationRegister {
 
         this.tape = tape;
         this.sumMoney();
+
+
     }
 
     private void sumMoney()
@@ -127,6 +133,10 @@ public class ComputationRegister {
 
             if (flag == true){
                 result.setOwner(true);
+
+            }else {
+                result.setOwner(false);
+                JOptionPane.showMessageDialog(null,"Invalid Owner. Please try again");
             }
         }
         else
@@ -148,59 +158,59 @@ public class ComputationRegister {
                 //checks if enough money is left from what is entered to get current/next item
                     switch (i) {
                         case "N":
-                            if(change >= 10)
+                            if(change >= 10 && VendingMachine.napkinCount>0)
                             {
                                 change -= 10;
                                 result.addActions("NAPKIN dispensed");
-                                CounterRegister napkinCounter = new CounterRegister("Napkin",VendingMachine.napkinCount);
                                 int count = napkinCounter.decrement();
                                 VendingMachine.updateNapkinCount(count);
                             }
-                            else
-                            {
-                                result.addActions("Not enough money to get NAPKIN");
+                            else if(VendingMachine.napkinCount==0){
+                                result.addActions("NAPKIN out of stock");
 
+                            }else {
+                                result.addActions("Not enough money to get NAPKIN");
                             }
 
                             break;
                         case "F":
-                            if(change >= 15)
+                            if(change >= 15 && VendingMachine.forkCount>0)
                             {
                                 change -= 15;
                                 result.addActions("FORK dispensed");
-                                CounterRegister forkCounter = new CounterRegister("Fork",VendingMachine.forkCount);
                                 int count = forkCounter.decrement();
                                 VendingMachine.updateForkCount(count);                            }
-                            else
-                            {
+                            else if(VendingMachine.forkCount==0) {
+                                result.addActions("FORK out of stock");
+                            }else{
                                 result.addActions("Not enough money to get FORK");
                             }
                             break;
                         case "S":
-                            if(change >= 20)
+                            if(change >= 20 && VendingMachine.spoonCount>0)
                             {
                                 change -= 20;
                                 result.addActions("SPOON dispensed");
-                                CounterRegister spoonCounter = new CounterRegister("Spoon",VendingMachine.spoonCount);
                                 int count = spoonCounter.decrement();
                                 VendingMachine.updateSpoonCount(count);                            }
-                            else
-                            {
+                            else if(VendingMachine.spoonCount==0) {
+                                result.addActions("SPOON out of stock");
+                            }else{
                                 result.addActions("Not enough money to get SPOON");
                             }
                             break;
                         case "K":
 
-                            if(change >= 25)
+                            if(change >= 25 && VendingMachine.knifeCount>0)
                             {
                                 change -= 25;
                                 result.addActions("KNIFE dispensed");
-                                CounterRegister knifeCounter = new CounterRegister("Knife",VendingMachine.knifeCount);
                                 int count = knifeCounter.decrement();
                                 VendingMachine.updateKnifeCount(count);
                             }
-                            else
-                            {
+                            else if(VendingMachine.knifeCount==0) {
+                                result.addActions("KNIFE out of stock");
+                            }else {
                                 result.addActions("Not enough money to get FORK");
                             }
                             break;
