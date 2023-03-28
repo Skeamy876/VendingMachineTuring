@@ -302,6 +302,8 @@ public class VendingMachine extends JFrame implements ActionListener {
                     this.dispose();
                     new VendingMachine();
 
+                    JOptionPane.showMessageDialog(this, "Welcome Owner, Till is "+ till,"Owner Information",JOptionPane.INFORMATION_MESSAGE); //dialog box to show items along with till
+                    till = 0;//resetting the till after telling owner to implement "resetting till"
                 }else {
                     dispenseDisplay.setText(dispenseDisplay.getText()+"\n Items: ");
                     for(String element: result.getActions()){
