@@ -18,6 +18,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 
 
+
+
+
+
+/**
+ * Created on 25/01/21 12:00 pm by Authors:
+ * 1. Ackeem Mclennon 1803349
+ * 2. Monique Bennett 2004188
+ * 3. Christian Willams 1903419
+ */
+
+
 public class VendingMachine extends JFrame implements ActionListener {
     private JPanel itemsPanel;
     private JPanel keyPadPanel,dispensePanel;

@@ -7,6 +7,14 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Created on 25/01/21 12:00 pm by Authors:
+ * 1. Ackeem Mclennon 1803349
+ * 2. Monique Bennett 2004188
+ * 3. Christian Willams 1903419
+
+ */
+
 public class ComputationRegister {
     private final LinkedList<String> money = new LinkedList<>(Arrays.asList("α", "β", "γ"));
     private  final LinkedList<String> items = new LinkedList<>(Arrays.asList("N", "F", "K", "S"));
@@ -20,16 +28,12 @@ public class ComputationRegister {
     public static CounterRegister forkCounter = new CounterRegister("Fork",VendingMachine.forkCount);
     public static CounterRegister knifeCounter = new CounterRegister("Knife",VendingMachine.knifeCount);
     public static CounterRegister spoonCounter = new CounterRegister("Spoon",VendingMachine.spoonCount);
-
     private Result result = new Result();
 
 
     public ComputationRegister(LinkedList<String> tape) {
-
         this.tape = tape;
         this.sumMoney();
-
-
     }
 
     private void sumMoney()
